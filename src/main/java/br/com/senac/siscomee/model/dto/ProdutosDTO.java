@@ -9,11 +9,12 @@ public class ProdutosDTO implements Serializable {
 
 	private Integer id;
     private String nmProduto;
-	private Float vlProduto;
+	private float vlProduto;
 	private String tpMedida;
 	private Integer qtdProduto;
 	private short inAtivo;
 	private Integer tipoProdutoId;
+	private String dsTipoProduto;
 	private int usuarioIdAtualiza;
 	private Date dtUltAtualiza;
 	
@@ -58,6 +59,16 @@ public class ProdutosDTO implements Serializable {
 	}
 	public void setTipoProdutoId(Integer tipoProdutoId) {
 		this.tipoProdutoId = tipoProdutoId;
+	}
+	
+	public String getDsTipoProduto() {
+		return dsTipoProduto;
+	}
+	public void setDsTipoProduto(String dsTipoProduto) {
+		this.dsTipoProduto = dsTipoProduto;
+	}
+	public void setVlProduto(float vlProduto) {
+		this.vlProduto = vlProduto;
 	}
 	public int getUsuarioIdAtualiza() {
 		return usuarioIdAtualiza;

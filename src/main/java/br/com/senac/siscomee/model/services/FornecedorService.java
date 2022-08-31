@@ -37,7 +37,7 @@ public class FornecedorService {
     	return this.fornecedorRepository.listarFornecedores();
 	}
 
-	public List<FornecedoresDTO> listarDocsOrcamentariosDTO()
+	public List<FornecedoresDTO> listarFornecedoresDTO()
 	{
 		List<FornecedoresDTO> listaDTO = new ArrayList<>();
 		

@@ -40,21 +40,14 @@ public class TiposProdutos implements Serializable {
     private short inAtivo;
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoProdutoId")
-    private Collection<Produtos> ProdutosCollection;
+    private Collection<Produtos> produtosCollection;
     @Basic(optional = false)
     @Column(name = "usuario_id_atualiza")
     private int usuarioIdAtualiza;
     @Basic(optional = false)
     @Column(name = "dt_ult_atualiza")
     private Date dtUltAtualiza;
-    
-    public Collection<Produtos> getProdutosCollection() {
-		return ProdutosCollection;
-	}
-
-	public void setProdutosCollection(Collection<Produtos> produtosCollection) {
-		ProdutosCollection = produtosCollection;
-	}
+	
 
     public TiposProdutos() {
     }
@@ -94,6 +87,14 @@ public class TiposProdutos implements Serializable {
     public void setInAtivo(short inAtivo) {
         this.inAtivo = inAtivo;  
     }
+    
+    public Collection<Produtos> getProdutosCollection() {
+		return produtosCollection;
+}
+
+    public void setFornecedoresCollection(Collection<Produtos> produtosCollection) {
+		this.produtosCollection = produtosCollection;
+}
     
     public int getUsuarioIdAtualiza() {
         return usuarioIdAtualiza;
