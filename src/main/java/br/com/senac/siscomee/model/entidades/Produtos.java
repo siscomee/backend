@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -47,9 +48,8 @@ public class Produtos implements Serializable {
     private short inAtivo;
    // @JsonManagedReference
     @JoinColumn(name = "tipo_produto_id", referencedColumnName = "id")
-    //@ManyToOne(optional = false)
-    private int tipoProdutoId;
-    //private TiposProdutos tipoProdutoId;
+    @ManyToOne(optional = false)
+    private TiposProdutos tipoProdutoId;
     @Basic(optional = false)
     @Column(name = "usuario_id_atualiza")
     private int usuarioIdAtualiza;
@@ -64,7 +64,7 @@ public class Produtos implements Serializable {
         this.id = id;
     }
 
-    public Produtos(Integer id, String nmProduto, Float vlProduto, String tpMedida, Integer qtdProduto, short inAtivo, int usuarioIdAtualiza, Date dtUltAtualiza) {
+    public Produtos(Integer id, String nmProduto, float vlProduto, String tpMedida, Integer qtdProduto, short inAtivo, int usuarioIdAtualiza, Date dtUltAtualiza) {
         this.id = id;
         this.nmProduto = nmProduto;
         this.vlProduto = vlProduto;
@@ -123,11 +123,11 @@ public class Produtos implements Serializable {
 		this.inAtivo = inAtivo;
 	}
 
-	public int getTipoProdutoId() {
+	public TiposProdutos getTipoProdutoId() {
 		return tipoProdutoId;
 	}
 
-	public void setTipoProdutoId(int tipoProdutoId) {
+	public void setTipoProdutoId(TiposProdutos tipoProdutoId) {
 		this.tipoProdutoId = tipoProdutoId;
 	}
 

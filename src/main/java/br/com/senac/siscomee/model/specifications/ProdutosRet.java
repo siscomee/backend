@@ -6,13 +6,14 @@ public interface ProdutosRet {
 
 	Integer getId();	
 	String  getNmProduto();
-	Float   getVlProduto();
+	float   getVlProduto();
 	String  getTpMedida();
 	Integer getQtdProduto();
-	Integer getTipoProdutoId();
-	String  getDsTipoProduto();
-	Boolean getInAtivo();
+	String  getInAtivo();
 	Integer getUsuarioIdAtualiza();
 	Date    getDtUltAtualiza();
+	Integer getTipoProdutoId();
+	String  getDsTipoProduto();
+	
 }
 

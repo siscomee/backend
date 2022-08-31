@@ -6,150 +6,176 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.senac.siscomee.model.dto.ProdutosDTO;
+import br.com.senac.siscomee.model.entidades.Fornecedores;
 import br.com.senac.siscomee.model.entidades.Produtos;
 import br.com.senac.siscomee.model.repository.ProdutoRepository;
 import br.com.senac.siscomee.model.specifications.ProdutosRet;
 import br.com.senac.siscomee.model.specifications.TipoProdutosRet;
 
+
 @Service
 public class ProdutoService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProdutoService.class);
-	private Date dataLocal = new Date();
-	
-	@Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProdutoService.class);
+    private Date dataLocal = new Date();
+
+    @Autowired
 	private ProdutoRepository produtoRepository;
-	
-	@PersistenceContext
-	private EntityManager entityManager;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	public ProdutoService(ProdutoRepository produtoRepository) {
-		this.produtoRepository = produtoRepository;
+    public List<ProdutosRet> listarProdutos() {
+    	return this.produtoRepository.listarProdutos();
 	}
 
-	public List<Produtos> listarTodos() {
-		return this.produtoRepository.findAll();
-	}
-
-	public List<ProdutosDTO> listarTodosAsDTO() {
-
+	public List<ProdutosDTO> listarProdutosDTO()
+	{
 		List<ProdutosDTO> listaDTO = new ArrayList<>();
-		for (Produtos produto : this.produtoRepository.findAll()) {
+		
+		for(Produtos Produto : this.produtoRepository.findAll()) {
 			ProdutosDTO dto = new ProdutosDTO();
-			dto.setId(produto.getId());
-			dto.setNmProduto(produto.getNmProduto());
-			dto.setVlProduto(produto.getVlProduto());
-			dto.setTpMedida(produto.getTpMedida());
-			dto.setQtdProduto(produto.getQtdProduto());
-			dto.setTipoProdutoId(produto.getTipoProdutoId());
-			dto.setInAtivo(produto.getInAtivo());
-			dto.setUsuarioIdAtualiza(produto.getUsuarioIdAtualiza());
-			dto.setDtUltAtualiza(produto.getDtUltAtualiza());
-			listaDTO.add(dto);
-		}
-
-		return listaDTO;
+				 dto.setId(Produto.getId());
+				 dto.setNmProduto(Produto.getNmProduto());
+				 dto.setVlProduto(Produto.getVlProduto());
+				 dto.setTpMedida(Produto.getTpMedida());
+	             dto.setTipoProdutoId(Produto.getTipoProdutoId().getId());
+	             dto.setDsTipoProduto(Produto.getTipoProdutoId().getDsTipoProduto());
+				 dto.setInAtivo(Produto.getInAtivo());
+				 dto.setDtUltAtualiza(Produto.getDtUltAtualiza());
+				 dto.setUsuarioIdAtualiza(Produto.getUsuarioIdAtualiza());
+				 listaDTO.add(dto);
+			}
+			
+			return listaDTO;
 	}
 	
-	public List<Produtos> isSaveValid(String nmProduto) {
-		return produtoRepository.findByNmProduto(nmProduto);
-	}
-
-	public Produtos saveProduto(Produtos produto) {
+	public Produtos addProduto(Produtos produto)
+	{
 		return produtoRepository.save(produto);
 	}
-
-	public List<Produtos> saveProdutoList(List<Produtos> produto) {
-		return produtoRepository.saveAll(produto);
-	}
-
-	public List<Produtos> getProduto() {
-		return produtoRepository.findAll();
-	}
-
-	public Produtos getProdutoById(int id) {
-		return produtoRepository.findById(id).orElse(null);
-	}
-
-	public Produtos updateProduto(Produtos produtosDTO) {
-		Produtos existeProduto = produtoRepository.findById(produtosDTO.getId())
-				.orElse(null);
-		existeProduto.setNmProduto(produtosDTO.getNmProduto());
-		existeProduto.setVlProduto(produtosDTO.getVlProduto());
-		existeProduto.setTpMedida(produtosDTO.getTpMedida());
-		existeProduto.setQtdProduto(produtosDTO.getQtdProduto());
-		existeProduto.setTipoProdutoId(produtosDTO.getTipoProdutoId());
-		existeProduto.setInAtivo(produtosDTO.getInAtivo());
-		existeProduto.setUsuarioIdAtualiza(produtosDTO.getUsuarioIdAtualiza());
-		existeProduto.setDtUltAtualiza(this.dataLocal);
-		return produtoRepository.save(existeProduto);
-	}
 	
-	public Produtos inativarProduto(Produtos produtosDTO) {
-		Produtos existeProduto = produtoRepository.findById(produtosDTO.getId())
-				.orElse(null);
-		existeProduto.setNmProduto(produtosDTO.getNmProduto());
-		existeProduto.setVlProduto(produtosDTO.getVlProduto());
-		existeProduto.setTpMedida(produtosDTO.getTpMedida());
-		existeProduto.setQtdProduto(produtosDTO.getQtdProduto());
-		existeProduto.setInAtivo(produtosDTO.getInAtivo());
-		existeProduto.setUsuarioIdAtualiza(produtosDTO.getUsuarioIdAtualiza());
-		existeProduto.setDtUltAtualiza(this.dataLocal);
-		return produtoRepository.save(existeProduto);
-	}
-
-	public String deleleProduto(int id) {
-		produtoRepository.deleteById(id);
-		return "Cadastro removido com sucesso!" + id;
-	}
-
-	public Page<ProdutosRet> buscarProdutoPageSort( String nmProduto, Float vlProduto, String tpMedida, String qtdProduto, Integer tipoProdutoId,  Short inAtivo,
-			Integer page, Integer size) {
-
-		//Pageable paging = PageRequest.of(page, size, Sort.by("inAtivo").descending());
-		
-
-		Page<ProdutosRet> pageProduto;
-
-		if ((inAtivo != null)  && (nmProduto == null))
-			pageProduto = produtoRepository.findByInAtivo(inAtivo, null);
-		
-		else if ((inAtivo != null) && (nmProduto == null))
-			pageProduto = produtoRepository.findByInAtivoAndNmProdutoContaining(inAtivo,nmProduto, null);
-		
-
-		else if ((inAtivo != null) && (nmProduto != null))
-			pageProduto = produtoRepository.findByInAtivoAndNmProdutoContaining(inAtivo, nmProduto, null);
-		
-		else if ((nmProduto != null) && (inAtivo == null))
-			pageProduto = produtoRepository.findByNmProdutoContaining(nmProduto, null);
-		
-		else if ((nmProduto != null) && (inAtivo != null))
-			pageProduto = produtoRepository.findByInAtivoAndNmProdutoContaining(inAtivo,
-					nmProduto, null);
-		else
-			pageProduto = produtoRepository.listarProdutos(null);
-
-		return pageProduto;
-	}
-	
-  // combo tipos produtos
-	public List<TipoProdutosRet> getTipoProdutos()
+	public Produtos atualizarProduto(Produtos produto)
 	{
-		return produtoRepository.getTipoProdutos();
+		Produtos Produto = produtoRepository.findById(produto.getId()).orElse(null);
+
+		Produto.setNmProduto(produto.getNmProduto());
+		Produto.setVlProduto(produto.getVlProduto());
+		Produto.setTpMedida(produto.getTpMedida());
+		Produto.setQtdProduto(produto.getQtdProduto());
+		Produto.setInAtivo(produto.getInAtivo());
+		Produto.setTipoProdutoId(produto.getTipoProdutoId());
+		Produto.setUsuarioIdAtualiza(produto.getUsuarioIdAtualiza());
+		Produto.setDtUltAtualiza(this.dataLocal);
+		
+		return produtoRepository.save(Produto);
+	}
+	
+	// combo tipos de produtos
+	public List<TipoProdutosRet> getTipoDeProdutos()
+	{
+		return produtoRepository.getTipoDeProdutos();
+	}
+	
+	public Produtos getProdutoById(int id)
+	{
+		return produtoRepository.findById(id).orElse(null);
+	}	
+	
+	public Produtos inativarProdutoByID(int idProduto)
+	{
+		Produtos Produto = produtoRepository.findById(idProduto).orElse(null);
+
+		Produto.setInAtivo((short) 0);		
+		Produto.setDtUltAtualiza(this.dataLocal);
+
+		return produtoRepository.save(Produto);
+	}
+	
+	public List<ProdutosDTO> filtrarProdutos(int idTipoDeProduto, String nmProduto, int situacao)
+	{
+		String Sql = "select p from Produtos p "
+				   
+				   	+ "where 1=1";
+
+					if(idTipoDeProduto != 0)
+					{
+						Sql += " and p.tipoProdutoId = " + idTipoDeProduto;
+					}
+					
+					if(!nmProduto.equals(null) && !nmProduto.equals("nulo"))
+					{
+						Sql += " and p.nmProduto like '%" + nmProduto + "%'";
+					}
+					
+					if(situacao != -1)
+					{
+						Sql += " and p.inAtivo = " + situacao;
+					}
+				
+					Sql += " order by p.inAtivo desc";
+
+					Query q = entityManager.createQuery(Sql);
+		
+					List<Produtos> Lista = q.getResultList();
+					
+					List<ProdutosDTO> listaDTO = new ArrayList<>();
+					
+					for(Produtos Produto : Lista)
+					{
+						ProdutosDTO dto = new ProdutosDTO();
+							 
+							 dto.setId(Produto.getId());
+							 dto.setNmProduto(Produto.getNmProduto());
+							 dto.setVlProduto(Produto.getVlProduto());
+							 dto.setTpMedida(Produto.getTpMedida());
+							 dto.setQtdProduto(Produto.getQtdProduto());
+				             dto.setTipoProdutoId(Produto.getTipoProdutoId().getId());
+							 dto.setInAtivo(Produto.getInAtivo());
+							 dto.setDsTipoProduto(Produto.getTipoProdutoId().getDsTipoProduto());
+							 dto.setDtUltAtualiza(Produto.getDtUltAtualiza());
+							 dto.setUsuarioIdAtualiza(Produto.getUsuarioIdAtualiza());
+							 listaDTO.add(dto);
+					}
+						
+					return listaDTO;
+	}
+	
+	public Boolean unicidade(int idTipoDeProduto, String nmProduto, String id)
+	{
+		String Sql = "select p from Produtos p "
+				   	+ "where 1=1 "
+					+ "and p.tipoProdutoId = " + idTipoDeProduto;
+					
+					if(!nmProduto.equals(null) && !nmProduto.equals("nulo"))
+					{
+						Sql += " and p.nmProduto = '" + nmProduto + "'";
+					}
+
+					if(!id.equals("null"))
+					{
+						Sql += " and p.id != " + id;
+					}
+
+					Query q = entityManager.createQuery(Sql);
+		
+					List<Fornecedores> Lista = q.getResultList();
+						
+					return Lista.size() > 0 ? false : true;
 	}
 
-    public Page<ProdutosRet> listarProdutos() {
-    	return this.produtoRepository.listarProdutos(null);
+	@Transactional
+	public void execute(String sql)
+	{
+		entityManager.createNativeQuery(sql).getResultList();		
 	}
-	    
-	    
 }
