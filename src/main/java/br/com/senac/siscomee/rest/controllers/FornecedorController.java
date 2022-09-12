@@ -63,7 +63,7 @@ public class FornecedorController {
 	
 	@ApiOperation(value="método p/ filtrar")
 	@GetMapping(path = "/filtrar/{idRamo}/{nmFornecedor}/{situacao}", produces = "application/json")
-	public ResponseEntity<?> filtrar(@PathVariable int idRamo, @PathVariable String nmFornecedor, @PathVariable int situacao) {	
+	public ResponseEntity<?> filtrar(@PathVariable int idRamo, @PathVariable String nmFornecedor, @PathVariable short situacao) {	
 		try {
 			return ResponseEntity.ok(fornecedorService.filtrarFornecedores(idRamo, nmFornecedor, situacao));
 		}catch (Exception e) {

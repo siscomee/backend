@@ -108,8 +108,8 @@ public class Fornecedores implements Serializable {
 		return inAtivo;
 	}
 
-	public void setInAtivo(short inAtivo) {
-		this.inAtivo = inAtivo;
+	public void setInAtivo(short i) {
+		this.inAtivo = i;
 	}
 
 
@@ -166,6 +166,8 @@ public class Fornecedores implements Serializable {
     public String toString() {
         return "br.com.senac.siscomee.model.entidades.Fornecedores[ id=" + id + " ]";
     }
+
+	
 
 	
     

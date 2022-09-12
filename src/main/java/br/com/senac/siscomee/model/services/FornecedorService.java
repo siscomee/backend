@@ -99,7 +99,7 @@ public class FornecedorService {
 		return fornecedorRepository.save(Fornecedor);
 	}
 	
-	public List<FornecedoresDTO> filtrarFornecedores(int idRamo, String nmFornecedor, int situacao)
+	public List<FornecedoresDTO> filtrarFornecedores(int idRamo, String nmFornecedor, short situacao)
 	{
 		String Sql = "select F from Fornecedores F "
 				   
@@ -119,6 +119,7 @@ public class FornecedorService {
 					{
 						Sql += " and F.inAtivo = " + situacao;
 					}
+					
 				
 					   	Sql += " order by F.inAtivo desc";
 

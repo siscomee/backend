@@ -117,7 +117,7 @@ public class ProdutoService {
 						Sql += " and p.nmProduto like '%" + nmProduto + "%'";
 					}
 					
-					if(situacao != -1)
+					if((situacao != -1)|| (situacao == 1) || situacao == 0)
 					{
 						Sql += " and p.inAtivo = " + situacao;
 					}
